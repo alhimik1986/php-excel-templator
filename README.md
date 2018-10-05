@@ -15,7 +15,9 @@ Using the extension you don’t need to create excel files from scratch using co
 ## Simple example
 There is a simplest example of how this might look (using less code).
 Suppose we have an excel file with the following template variables:
+
 ![Template](readme_resources/template.png)
+
 The code will be as follows:
 ```
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
@@ -26,6 +28,7 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', [
 ]);
 ```
 As a result, we get:
+
 ![Exported file](readme_resources/exported_file.png)
 
 Using this extension, we just create a template file with the styles we need and specify template variables in it. In the code, we just pass the parameters to template variables.
