@@ -10,6 +10,10 @@
 PHP Excel модуль, позволяющий экспортировать excel-файлы из excel-шаблона.
 Теперь не нужно при помощи кода с нуля создавать excel-файлы, прописывать в нём стили и т. д.
 
+Демонстрация:
+
+![Демонстрация](readme_resources/demo.png)
+
 ## Простой пример
 Самый простой пример, как это может выглядеть (с минимальным количеством кода):
 Допустим, у нас есть excel-файл со следующими шаблонными переменными:
@@ -74,11 +78,7 @@ use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 
 $params = [
 	'{current_date}' => new ExcelParam(CellSetterStringValue::class, date('d-m-Y')),
-	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department', function(CallbackParam $param) {
-		$sheet = $param->sheet;
-		$cell_coordinate = $param->coordinate;
-		$sheet->getStyle($cell_coordinate)->getFont()->setBold(true);
-	}),
+	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department'),
 ];
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params);
 ```

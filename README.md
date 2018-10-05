@@ -12,6 +12,11 @@
 It's PHP Spreadsheet extension that allows you to export excel files from an excel template.
 Using the extension you don’t need to create excel files from scratch using code, set styles and so on.
 
+Demo screenshot:
+
+![Demo](readme_resources/demo.png)
+
+
 ## Simple example
 There is a simplest example of how this might look (using less code).
 Suppose we have an excel file with the following template variables:
@@ -76,11 +81,7 @@ use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 
 $params = [
 	'{current_date}' => new ExcelParam(CellSetterStringValue::class, date('d-m-Y')),
-	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department', function(CallbackParam $param) {
-		$sheet = $param->sheet;
-		$cell_coordinate = $param->coordinate;
-		$sheet->getStyle($cell_coordinate)->getFont()->setBold(true);
-	}),
+	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department'),
 ];
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params);
 ```
