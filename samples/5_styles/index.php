@@ -5,7 +5,7 @@ require( __DIR__ . '/../Bootstrap.php');
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterSingleValue;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
 
@@ -49,20 +49,24 @@ $salesManagerArr = [
 $hoursArr = [
 	['01', '02', '03', '04', '05', '06', '07', '08'],
 ];
-$numOfSalesByDates = [
+$salesByHoursArr = [
 	['10000', '2000', '300', '40000', '500', '600', '700', '800000'],
 	['1000', '200000', '3000', '400', '5000', '6000', '7000', '8000'],
 	['10000', '2000', '30000', '40000', '500000', '60', '70000', '800'],
 ];
 
-$params = [
-	'{current_date}' => new ExcelParam(CellSetterSingleValue::class, $now->format('d-m-Y')),
-	'{department}' => new ExcelParam(CellSetterSingleValue::class, 'Sales department'),
+define('STRING_TYPE', CellSetterStringValue::class);
+define('ARRAY_TYPE', CellSetterArrayValue::class);
+define('ARRAY_2D_TYPE', CellSetterArray2DValue::class);
 
-	'[date]' => new ExcelParam(CellSetterArrayValue::class, $dateArr),
-	'[code]' => new ExcelParam(CellSetterArrayValue::class, $codeArr),
-	'[manager]' => new ExcelParam(CellSetterArrayValue::class, $managerArr),
-	'[sales_amount]' => new ExcelParam(CellSetterArrayValue::class, $salesAmountArr, function(CallbackParam $param) {
+$params = [
+	'{current_date}' => new ExcelParam(STRING_TYPE, $now->format('d-m-Y')),
+	'{department}' => new ExcelParam(STRING_TYPE, 'Sales department'),
+
+	'[date]' => new ExcelParam(ARRAY_TYPE, $dateArr),
+	'[code]' => new ExcelParam(ARRAY_TYPE, $codeArr),
+	'[manager]' => new ExcelParam(ARRAY_TYPE, $managerArr),
+	'[sales_amount]' => new ExcelParam(ARRAY_TYPE, $salesAmountArr, function(CallbackParam $param) {
 		$sheet = $param->sheet;
 		$row_index = $param->row_index;
 		$cell_coordinate = $param->coordinate;
@@ -74,9 +78,9 @@ $params = [
 		}
 	}),
 
-	'[sales_manager]' => new ExcelParam(CellSetterArrayValue::class, $salesManagerArr),
-	'[[hours]]' => new ExcelParam(CellSetterArray2DValue::class, $hoursArr),
-	'[[sales_amount_by_hours]]' => new ExcelParam(CellSetterArray2DValue::class, $numOfSalesByDates, function(CallbackParam $param) {
+	'[sales_manager]' => new ExcelParam(ARRAY_TYPE, $salesManagerArr),
+	'[[hours]]' => new ExcelParam(ARRAY_2D_TYPE, $hoursArr),
+	'[[sales_amount_by_hours]]' => new ExcelParam(ARRAY_2D_TYPE, $salesByHoursArr, function(CallbackParam $param) {
 		$sheet = $param->sheet;
 		$row_index = $param->row_index;
 		$col_index = $param->col_index;

@@ -4,7 +4,7 @@ require( __DIR__ . '/../Bootstrap.php');
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterSingleValue;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
 
@@ -48,15 +48,15 @@ $salesManagerArr = [
 $hoursArr = [
 	['01', '02', '03', '04', '05', '06', '07', '08'],
 ];
-$numOfSalesByDates = [
+$numOfSalesByHours = [
 	['100', '200', '300', '400', '500', '600', '700', '800'],
 	['1000', '2000', '3000', '4000', '5000', '6000', '7000', '8000'],
 	['10000', '20000', '30000', '40000', '50000', '60000', '70000', '80000'],
 ];
 
 $params = [
-	'{current_date}' => new ExcelParam(CellSetterSingleValue::class, $now->format('d-m-Y')),
-	'{department}' => new ExcelParam(CellSetterSingleValue::class, 'Sales department'),
+	'{current_date}' => new ExcelParam(CellSetterStringValue::class, $now->format('d-m-Y')),
+	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department'),
 
 	'[date]' => new ExcelParam(CellSetterArrayValue::class, $dateArr),
 	'[code]' => new ExcelParam(CellSetterArrayValue::class, $codeArr),
@@ -65,7 +65,7 @@ $params = [
 
 	'[sales_manager]' => new ExcelParam(CellSetterArrayValue::class, $salesManagerArr),
 	'[[hours]]' => new ExcelParam(CellSetterArray2DValue::class, $hoursArr),
-	'[[sales_amount_by_hours]]' => new ExcelParam(CellSetterArray2DValue::class, $numOfSalesByDates),
+	'[[sales_amount_by_hours]]' => new ExcelParam(CellSetterArray2DValue::class, $numOfSalesByHours),
 ];
 PhpExcelTemplator::saveToFile($templateFile, $fileName, $params);
 // PhpExcelTemplator::outputToFile($templateFile, $fileName, $params); // to download the file from web page

@@ -9,7 +9,7 @@ use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
 
-class CellSetterSingleValue implements ICellSetter
+class CellSetterStringValue implements ICellSetter
 {
 	/**
 	 * {@inheritdoc}

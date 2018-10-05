@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterSingleValue;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
@@ -69,7 +69,7 @@ class PhpExcelTemplator
 	{
 		foreach($params as $key=>$param) {
 			if ( ! $param instanceof ExcelParam) {
-				$setterClass = CellSetterSingleValue::class;
+				$setterClass = CellSetterStringValue::class;
 
 				if (is_array($param)) {
 					$valueArr = reset($param);

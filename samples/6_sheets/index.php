@@ -17,12 +17,12 @@ $sheet1 = $spreadsheet->getSheet(0);
 PhpExcelTemplator::renderWorksheet($sheet1, $templateVarsArr, $params);
 
 $sheet2 = clone $templateSheet;
-$sheet2->setTitle('Лист 2');
+$sheet2->setTitle('Workshet 2');
 $spreadsheet->addSheet($sheet2);
 PhpExcelTemplator::renderWorksheet($sheet2, $templateVarsArr, $params);
 
 $sheet3 = clone $templateSheet;
-$sheet3->setTitle('Лист 3');
+$sheet3->setTitle('Workshet 3');
 $spreadsheet->addSheet($sheet3);
 PhpExcelTemplator::renderWorksheet($sheet3, $templateVarsArr, $params);
 

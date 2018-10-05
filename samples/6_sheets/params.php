@@ -1,8 +1,7 @@
 <?php
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterSingleValue;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
 
 $now = new DateTime();
 $dateArr = [
@@ -34,14 +33,17 @@ $salesAmountArr = [
 	'5 900 $',
 ];
 
-$params = [
-	'{current_date}' => new ExcelParam(CellSetterSingleValue::class, $now->format('d-m-Y')),
-	'{department}' => new ExcelParam(CellSetterSingleValue::class, 'Sales department'),
+define('STRING_TYPE', CellSetterStringValue::class);
+define('ARRAY_TYPE', CellSetterArrayValue::class);
 
-	'[date]' => new ExcelParam(CellSetterArrayValue::class, $dateArr),
-	'[code]' => new ExcelParam(CellSetterArrayValue::class, $codeArr),
-	'[manager]' => new ExcelParam(CellSetterArrayValue::class, $managerArr),
-	'[sales_amount]' => new ExcelParam(CellSetterArrayValue::class, $salesAmountArr),
+$params = [
+	'{current_date}' => new ExcelParam(STRING_TYPE, $now->format('d-m-Y')),
+	'{department}' => new ExcelParam(STRING_TYPE, 'Sales department'),
+
+	'[date]' => new ExcelParam(ARRAY_TYPE, $dateArr),
+	'[code]' => new ExcelParam(ARRAY_TYPE, $codeArr),
+	'[manager]' => new ExcelParam(ARRAY_TYPE, $managerArr),
+	'[sales_amount]' => new ExcelParam(ARRAY_TYPE, $salesAmountArr),
 ];
 
 return $params;
