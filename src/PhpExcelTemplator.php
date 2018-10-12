@@ -19,13 +19,15 @@ class PhpExcelTemplator
 	 * @param string $templateFile Путь к файлу шаблона
 	 * @param string $fileName Имя экспортируемого файла
 	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+	 * ячеек без использования сеттеров
 	 */
-	public static function outputToFile($templateFile, $fileName, $params)
+	public static function outputToFile($templateFile, $fileName, $params, $callbacks=[])
 	{
 		$spreadsheet = IOFactory::load($templateFile);
 		$sheet = $spreadsheet->getActiveSheet();
 		$templateVarsArr = $sheet->toArray();
-		static::renderWorksheet($sheet, $templateVarsArr, $params);
+		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks);
 		static::outputSpreadsheetToFile($spreadsheet, $fileName);
 	}
 
@@ -33,13 +35,15 @@ class PhpExcelTemplator
 	 * @param string $templateFile Путь к файлу шаблона
 	 * @param string $fileName Имя экспортируемого файла
 	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+	 * ячеек без использования сеттеров
 	 */
-	public static function saveToFile($templateFile, $fileName, $params)
+	public static function saveToFile($templateFile, $fileName, $params, $callbacks=[])
 	{
 		$spreadsheet = IOFactory::load($templateFile);
 		$sheet = $spreadsheet->getActiveSheet();
 		$templateVarsArr = $sheet->toArray();
-		static::renderWorksheet($sheet, $templateVarsArr, $params);
+		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks);
 		static::saveSpreadsheetToFile($spreadsheet, $fileName);
 	}
 
@@ -47,11 +51,13 @@ class PhpExcelTemplator
 	 * @param Worksheet $sheet Лист, в котором хранятся шаблонные переменные
 	 * @param array $templateVarsArr Массив ячеек, содержащийся в таблице шаблона
 	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+	 * ячеек без использования сеттеров
 	 * @return Worksheet
 	 */
-	public static function renderWorksheet(Worksheet $sheet, $templateVarsArr, $params)
+	public static function renderWorksheet(Worksheet $sheet, $templateVarsArr, $params, $callbacks=[])
 	{
-		$params = static::getCorrectedParams($params);
+		$params = static::getCorrectedParams($params, $callbacks);
 		static::clearTemplateVarsInSheet($sheet, $templateVarsArr, $params);
 		static::insertParams($sheet, $templateVarsArr, $params);
 		return $sheet;
@@ -63,13 +69,16 @@ class PhpExcelTemplator
 	 * с соответствующим сеттером.
 	 * @param ExcelParam[] | array $params Параметры, которым нужно присвоить
 	 * соответствующий сеттер, если он не задан
+	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+	 * ячеек без использования сеттеров
 	 * @return ExcelParam[] Скорректированные параметры
 	 */
-	protected static function getCorrectedParams($params)
+	protected static function getCorrectedParams($params, $callbacks)
 	{
 		foreach($params as $key=>$param) {
 			if ( ! $param instanceof ExcelParam) {
 				$setterClass = CellSetterStringValue::class;
+				$callback = array_key_exists($key, $callbacks) ? $callbacks[$key] : function(){};
 
 				if (is_array($param)) {
 					$valueArr = reset($param);
@@ -78,7 +87,7 @@ class PhpExcelTemplator
 						: CellSetterArrayValue::class;
 				}
 
-				$params[$key] = new ExcelParam($setterClass, $param);
+				$params[$key] = new ExcelParam($setterClass, $param, $callback);
 			}
 		}
 

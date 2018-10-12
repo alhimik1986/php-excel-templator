@@ -92,3 +92,32 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params
 Во-вторых, в каждом сеттере можно передавать функцию обратного вызова, в которой мы можем менять стили вставляемых ячеек. Например, нужно отметить жирным шрифтом сотрудников, которые отличились в этом месяце.
 
 Примеры кода, в котором используются все виды сеттеров, приведены папке samples.
+
+## Как задать стили без использования сеттеров?
+В большинстве случаев задавать сеттеры явно - не так удобно. Хочется использовать минимум кода. Поэтому есть возможность задать стили без использования сеттеров:
+```
+use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+
+$params = [
+	'{current_date}' => date('d-m-Y'),
+	'{department}' => 'Sales department',
+	'[sales_amount]' => [
+		'10230',
+		'45100',
+		'70500',
+	],
+];
+
+$callbacks = [
+	'[sales_amount]' => function(CallbackParam $param) {
+		$amount = $param->param[$param->row_index];
+		if ($amount > 50000) {
+			$cell_coordinate = $param->coordinate;
+			$param->sheet->getStyle($cell_coordinate)->getFont()->setBold(true);
+		}
+	},
+];
+
+PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params, $callbacks);
+```

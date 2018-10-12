@@ -15,7 +15,7 @@ class ExcelParam
 	public $value;
 
 	/**
-	 * @var function Функция обратного вызова, необходимая для форматирования ячейки таблицы
+	 * @var callable Функция обратного вызова, необходимая для форматирования ячейки таблицы
 	 */
 	public $callback;
 
@@ -24,7 +24,7 @@ class ExcelParam
 	 * @param mixed $value Значение для параметра
 	 * @param function $callback Функция обратного вызова, необходимая для форматирования ячейки таблицы
 	 */
-	public function __construct($setterClass, $value, $callback=null)
+	public function __construct($setterClass, $value, callable $callback=null)
 	{
 		$this->setterClass = $setterClass;
 		$this->value       = $value;

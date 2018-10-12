@@ -95,3 +95,32 @@ You ask, what for specify setters explicitly?
 - Secondly, in each setter, you can pass a callback function in which we can change the styles of the inserted cells. For example, you need to highlight with bold font the employees who made the best sales in this month.
 
 Examples of code that uses all kinds of setters are listed in the folder "samples".
+
+## How to set styles without setters?
+In most cases to use the setters explicitly is not so convenient. I suppose you want to use minimum code. Therefore, I made it possible to set styles without using setters:
+```
+use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+
+$params = [
+	'{current_date}' => date('d-m-Y'),
+	'{department}' => 'Sales department',
+	'[sales_amount]' => [
+		'10230',
+		'45100',
+		'70500',
+	],
+];
+
+$callbacks = [
+	'[sales_amount]' => function(CallbackParam $param) {
+		$amount = $param->param[$param->row_index];
+		if ($amount > 50000) {
+			$cell_coordinate = $param->coordinate;
+			$param->sheet->getStyle($cell_coordinate)->getFont()->setBold(true);
+		}
+	},
+];
+
+PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params, $callbacks);
+```
