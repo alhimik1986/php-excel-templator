@@ -23,7 +23,7 @@ PHP Excel модуль, позволяющий экспортировать exce
 Код будет выглядеть следующим образом:
 ```
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-require_once('vendor/autoload.php'); // если не используется чистый код без фреймворка
+require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', [
 	'{current_date}' => date('d-m-Y'),
@@ -77,7 +77,7 @@ use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 
-require_once('vendor/autoload.php'); // если не используется чистый код без фреймворка
+require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
 $params = [
 	'{current_date}' => new ExcelParam(CellSetterStringValue::class, date('d-m-Y')),
@@ -101,7 +101,7 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params
 ```
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-require_once('vendor/autoload.php'); // если не используется чистый код без фреймворка
+require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
 $params = [
 	'{current_date}' => date('d-m-Y'),
