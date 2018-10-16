@@ -104,7 +104,6 @@ class PhpExcelTemplator
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		self::setHeaders($fileName);
 		$writer->save('php://output');
-		exit;
 	}
 
 	/**
@@ -116,7 +115,6 @@ class PhpExcelTemplator
 	{
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$writer->save(basename($fileName));
-		exit;
 	}
 
 	/**

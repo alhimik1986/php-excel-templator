@@ -26,6 +26,7 @@ Suppose we have an excel file with the following template variables:
 The code will be as follows:
 ```
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+require_once('vendor/autoload.php'); // if you don't use framework
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', [
 	'{current_date}' => date('d-m-Y'),
@@ -79,6 +80,8 @@ use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 
+require_once('vendor/autoload.php'); // if you don't use framework
+
 $params = [
 	'{current_date}' => new ExcelParam(CellSetterStringValue::class, date('d-m-Y')),
 	'{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department'),
@@ -101,6 +104,7 @@ In most cases to use the setters explicitly is not so convenient. I suppose you 
 ```
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+require_once('vendor/autoload.php'); // if you don't use framework
 
 $params = [
 	'{current_date}' => date('d-m-Y'),
