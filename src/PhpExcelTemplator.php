@@ -102,7 +102,7 @@ class PhpExcelTemplator
 	public static function outputSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
 	{
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-		self::setHeaders($fileName);
+		self::setHeaders(basename($fileName));
 		$writer->save('php://output');
 	}
 
@@ -114,7 +114,7 @@ class PhpExcelTemplator
 	public static function saveSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
 	{
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-		$writer->save(basename($fileName));
+		$writer->save($fileName);
 	}
 
 	/**
