@@ -128,3 +128,12 @@ $callbacks = [
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params, $callbacks);
 ```
+
+## Special setter for special templates (CellSetterArrayValueSpecial)
+
+There are special templates, which require to insert the whole row, and not insert cell with shifting down. Moreover, it's required to merge cells, as well as the cell in which there was a template variable.
+
+![Special template](readme_resources/special_template.png)
+
+
+For these templates, a special setter has been created: CellSetterArrayValueSpecial. Examples of code that uses it is given in folder: samples/8_special_template.

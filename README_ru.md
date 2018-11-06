@@ -125,3 +125,10 @@ $callbacks = [
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params, $callbacks);
 ```
+
+## Специальный сеттер для специального шаблона (CellSetterArrayValueSpecial)
+Существуют такие особые шаблоны, в которых, вставляя одномерный массив, нужно именно вставлять полностью строку, а не вставлять ячейку со сдвигом вниз и, к тому же, делать объединение ячеек, так же как и в ячейке, в которой была шаблонная переменная.
+
+![Специальный шаблон](readme_resources/special_template.png)
+
+Для таких шаблонов создан специальный сеттер: CellSetterArrayValueSpecial. Пример его использования приведён в папке: samples/8_special_template.

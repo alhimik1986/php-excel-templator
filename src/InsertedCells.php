@@ -67,6 +67,30 @@ class InsertedCells
 	}
 
 	/**
+	 * Подменяет добавленные столбцы относительно указанной строки и столбца
+	 * @param $row_key integer Строка таблицы, в которой была шаблонная переменная
+	 * @param $col_key integer Столбец таблицы, в котором была шаблонная переменная
+	 * @param $inserted_cols_count integer Количество добавленных столбцов
+	 */
+	public function setInsertedCols($row_key, $col_key, $inserted_cols_count)
+	{
+		$this->_addKeysTo2DArrayIfNotExists($this->inserted_cols, $row_key, $col_key);
+		$this->inserted_cols[$row_key][$col_key] = $inserted_cols_count;
+	}
+
+	/**
+	 * Подменяет добавленные строки относительно указанной строки
+	 * @param $row_key integer Строка таблицы, в которой была шаблонная переменная
+	 * @param $col_key integer Столбец таблицы, в котором была шаблонная переменная
+	 * @param $inserted_rows_count integer Количество добавленных строк
+	 */
+	public function setInsertedRows($row_key, $col_key, $inserted_rows_count)
+	{
+		$this->_addKeysTo2DArrayIfNotExists($this->inserted_rows, $col_key, $row_key);
+		$this->inserted_rows[$col_key][$row_key] = $inserted_rows_count;
+	}
+
+	/**
 	 * Регистрирует добавленные столбцы относительно указанной строки и столбца
 	 * @param $row_key integer Строка таблицы, в которой была шаблонная переменная
 	 * @param $col_key integer Столбец таблицы, в котором была шаблонная переменная
