@@ -7,6 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
@@ -102,6 +103,7 @@ class PhpExcelTemplator
 	public static function outputSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
 	{
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		Calculation::getInstance($spreadsheet)->clearCalculationCache();
 		self::setHeaders(basename($fileName));
 		$writer->save('php://output');
 	}
@@ -114,6 +116,7 @@ class PhpExcelTemplator
 	public static function saveSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
 	{
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		Calculation::getInstance($spreadsheet)->clearCalculationCache();
 		$writer->save($fileName);
 	}
 
