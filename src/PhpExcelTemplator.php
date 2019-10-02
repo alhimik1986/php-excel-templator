@@ -2,64 +2,96 @@
 
 namespace alhimik1986\PhpExcelTemplator;
 
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
 use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
+use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 
 class PhpExcelTemplator
 {
-	/**
-	 * @param string $templateFile Путь к файлу шаблона
-	 * @param string $fileName Имя экспортируемого файла
-	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
-	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
-	 * ячеек без использования сеттеров
-	 */
-	public static function outputToFile($templateFile, $fileName, $params, $callbacks=[])
+    const BEFORE_INSERT_PARAMS = 'BeforeInsertParams';
+    const AFTER_INSERT_PARAMS  = 'AfterInsertParams';
+    const BEFORE_SAVE          = 'BeforeSave';
+
+    /**
+     * @param string $templateFile Путь к файлу шаблона
+     * @param string $fileName Имя экспортируемого файла
+     * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+     * @param callable[] $callbacks Массив функций обратного вызова, чтобы менять стили
+     * ячеек без использования сеттеров
+     * @param callable[] $events События
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+	public static function outputToFile($templateFile, $fileName, $params, $callbacks=[], $events=[])
 	{
-		$spreadsheet = IOFactory::load($templateFile);
+		$spreadsheet = static::getSpreadsheet($templateFile);
 		$sheet = $spreadsheet->getActiveSheet();
 		$templateVarsArr = $sheet->toArray();
-		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks);
-		static::outputSpreadsheetToFile($spreadsheet, $fileName);
+		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks, $events);
+		static::outputSpreadsheetToFile($spreadsheet, $fileName, $events);
 	}
 
-	/**
-	 * @param string $templateFile Путь к файлу шаблона
-	 * @param string $fileName Имя экспортируемого файла
-	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
-	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
-	 * ячеек без использования сеттеров
-	 */
-	public static function saveToFile($templateFile, $fileName, $params, $callbacks=[])
+    /**
+     * @param string $templateFile Путь к файлу шаблона
+     * @param string $fileName Имя экспортируемого файла
+     * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+     * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+     * ячеек без использования сеттеров
+     * @param callable[] $events События
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+	public static function saveToFile($templateFile, $fileName, $params, $callbacks=[], $events=[])
 	{
-		$spreadsheet = IOFactory::load($templateFile);
+        $spreadsheet = static::getSpreadsheet($templateFile);
 		$sheet = $spreadsheet->getActiveSheet();
 		$templateVarsArr = $sheet->toArray();
-		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks);
-		static::saveSpreadsheetToFile($spreadsheet, $fileName);
+		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks, $events);
+		static::saveSpreadsheetToFile($spreadsheet, $fileName, $events);
 	}
 
-	/**
-	 * @param Worksheet $sheet Лист, в котором хранятся шаблонные переменные
-	 * @param array $templateVarsArr Массив ячеек, содержащийся в таблице шаблона
-	 * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
-	 * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
-	 * ячеек без использования сеттеров
-	 * @return Worksheet
-	 */
-	public static function renderWorksheet(Worksheet $sheet, $templateVarsArr, $params, $callbacks=[])
+    /**
+     * @param string $templateFile Путь к файлу шаблона
+     * @return Spreadsheet
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+	protected static function getSpreadsheet($templateFile)
+    {
+        return IOFactory::load($templateFile);
+    }
+
+    /**
+     * @param Worksheet &$sheet Лист, в котором хранятся шаблонные переменные
+     * @param array $templateVarsArr Массив ячеек, содержащийся в таблице шаблона
+     * @param ExcelParam[] | array $params Параметры, передаваемые в сеттер
+     * @param array $callbacks Массив функций обратного вызова, чтобы менять стили
+     * ячеек без использования сеттеров
+     * @param callable[] $events События
+     * @return Worksheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+	public static function renderWorksheet(Worksheet &$sheet, $templateVarsArr, $params, $callbacks=[], $events=[])
 	{
 		$params = static::getCorrectedParams($params, $callbacks);
 		static::clearTemplateVarsInSheet($sheet, $templateVarsArr, $params);
+
+		if (isset($events[self::BEFORE_INSERT_PARAMS]) AND is_callable($events[self::BEFORE_INSERT_PARAMS])) {
+            $events[self::BEFORE_INSERT_PARAMS]($sheet, $templateVarsArr);
+        }
+
 		static::insertParams($sheet, $templateVarsArr, $params);
+
+        if (isset($events[self::AFTER_INSERT_PARAMS]) AND is_callable($events[self::AFTER_INSERT_PARAMS])) {
+            $events[self::AFTER_INSERT_PARAMS]($sheet, $templateVarsArr);
+        }
+
 		return $sheet;
 	}
 
@@ -94,28 +126,54 @@ class PhpExcelTemplator
 		return $params;
 	}
 
-	/**
-	 * Вывести файл для скачивания.
-	 * @param Spreadsheet $spreadsheet
-	 * @param string $fileName Имя файла
-	 */
-	public static function outputSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
+    /**
+     * Вывести файл для скачивания.
+     * @param Spreadsheet $spreadsheet
+     * @param string $fileName Имя файла
+     * @param callable[] $events События
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+	public static function outputSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName, $events=[])
 	{
-		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer = static::getWriter($spreadsheet);
+		Calculation::getInstance($spreadsheet)->clearCalculationCache();
 		self::setHeaders(basename($fileName));
+
+        if (isset($events[self::BEFORE_SAVE]) AND is_callable($events[self::BEFORE_SAVE])) {
+            $events[self::BEFORE_SAVE]($spreadsheet, $writer);
+        }
+
 		$writer->save('php://output');
 	}
 
-	/**
-	 * Сохранить в файл.
-	 * @param Spreadsheet $spreadsheet
-	 * @param string $fileName Имя файла
-	 */
-	public static function saveSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName)
+    /**
+     * Сохранить в файл.
+     * @param Spreadsheet $spreadsheet
+     * @param string $fileName Имя файла
+     * @param callable[] $events События
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+	public static function saveSpreadsheetToFile(Spreadsheet $spreadsheet, $fileName, $events=[])
 	{
-		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer = static::getWriter($spreadsheet);
+		Calculation::getInstance($spreadsheet)->clearCalculationCache();
+
+        if (isset($events['beforeSave']) AND is_callable($events['beforeSave'])) {
+            $events['beforeSave']($spreadsheet, $writer);
+        }
+
 		$writer->save($fileName);
 	}
+
+    /**
+     * @param Spreadsheet $spreadsheet
+     * @return IWriter
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+	protected static function getWriter(Spreadsheet $spreadsheet)
+    {
+        return IOFactory::createWriter($spreadsheet, 'Xlsx');
+    }
 
 	/**
 	 * Устанавливаю параметры header, необходимые для скачивания excel-файла.
@@ -159,12 +217,14 @@ class PhpExcelTemplator
 		}
 	}
 
-	/**
-	 * Вставляет параметры в указанные шаблонные переменные
-	 * @param Worksheet $sheet
-	 * @param array $templateVarsArr Массив ячеек, содержащийся в таблице шаблона
-	 * @param ExcelParam $params Параметры, передаваемые в сеттер
-	 */
+    /**
+     * Вставляет параметры в указанные шаблонные переменные
+     * @param Worksheet $sheet
+     * @param array $templateVarsArr Массив ячеек, содержащийся в таблице шаблона
+     * @param ExcelParam[] $params Параметры, передаваемые в сеттер
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
+     */
 	public static function insertParams(Worksheet $sheet, $templateVarsArr, $params)
 	{
 		$insertedCells = new InsertedCells();

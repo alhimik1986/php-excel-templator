@@ -2,8 +2,7 @@
 
 namespace alhimik1986\PhpExcelTemplator\setters;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Exception;
 use alhimik1986\PhpExcelTemplator\InsertedCells;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
@@ -11,9 +10,10 @@ use alhimik1986\PhpExcelTemplator\params\CallbackParam;
 
 class CellSetterStringValue implements ICellSetter
 {
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     * @throws Exception
+     */
 	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
 		$sheet = $setterParam->sheet;
 		$row_key = $setterParam->row_key;
@@ -39,14 +39,15 @@ class CellSetterStringValue implements ICellSetter
 		return $insertedCells;
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return boolean
-	 */
+    /**
+     * @param mixed $value
+     * @return boolean
+     * @throws Exception
+     */
 	private function _validateValue($value)
 	{
 		if (is_array($value)) {
-			throw new \Exception('В классе '.ExcelParam::class.' поле "value" не должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+			throw new Exception('В классе '.ExcelParam::class.' поле "value" не должно быть массивом, когда используется сеттер '.__CLASS__.'.');
 		}
 		return true;
 	}

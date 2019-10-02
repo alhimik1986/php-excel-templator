@@ -3,11 +3,12 @@
 namespace alhimik1986\PhpExcelTemplator\params;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Exception;
 
 class SetterParam
 {
 	/**
-	 * @var PhpOffice\PhpSpreadsheet\Worksheet\Worksheet Текущий лист таблицы
+	 * @var Worksheet Текущий лист таблицы
 	 */
 	public $sheet;
 
@@ -36,15 +37,16 @@ class SetterParam
 	 */
 	public $col_content;
 
-	/**
-	 * @param array $params
-	 */
+    /**
+     * @param array $params
+     * @throws Exception
+     */
 	public function __construct($params)
 	{
 		$fields = ['sheet', 'tpl_var_name', 'params', 'row_key', 'col_key', 'col_content'];
 		foreach($fields as $field) {
 			if ( ! array_key_exists($field, $params)) {
-				throw new \Exception('В конструкторе класса '.__CLASS__.' не был указан параметр '.$field.'.');
+				throw new Exception('В конструкторе класса '.__CLASS__.' не был указан параметр '.$field.'.');
 			}
 			$this->$field = $params[$field];
 		}

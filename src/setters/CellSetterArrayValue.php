@@ -9,12 +9,15 @@ use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\ReferenceHelper;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use Exception;
 
 class CellSetterArrayValue implements ICellSetter
 {
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
+     */
 	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
 		$sheet = $setterParam->sheet;
 		$row_key = $setterParam->row_key;
@@ -49,27 +52,29 @@ class CellSetterArrayValue implements ICellSetter
 		return $insertedCells;
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return boolean
-	 */
+    /**
+     * @param mixed $value
+     * @return boolean
+     * @throws Exception
+     */
 	private function _validateValue($value)
 	{
 		if ( ! is_array($value)) {
-			throw new \Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+			throw new Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
 		}
 		return count($value) > 0;
 	}
 
-	/**
-	 * @param Worksheet $sheet
-	 * @param String[] $values
-	 * @param InsertedCells $insertedCells
-	 * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
-	 * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
-	 * @param integer $pColumnIndex Текущий столбец таблицы
-	 * @param integer $pRow Текущая строка таблицы
-	 */
+    /**
+     * @param Worksheet $sheet
+     * @param String[] $values
+     * @param InsertedCells $insertedCells
+     * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
+     * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
+     * @param integer $pColumnIndex Текущий столбец таблицы
+     * @param integer $pRow Текущая строка таблицы
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
 	private function _insertNewRowsIfNeed(Worksheet $sheet, $values, $insertedCells, $col_key, $row_key, $pColumnIndex, $pRow)
 	{
 		$rowsToInsert = count($values) - 1;

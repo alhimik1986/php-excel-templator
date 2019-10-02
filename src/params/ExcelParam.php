@@ -22,7 +22,7 @@ class ExcelParam
 	/**
 	 * @param string $setterClass Класс сеттера, который вставляет значения определённого типа в таблицу
 	 * @param mixed $value Значение для параметра
-	 * @param function $callback Функция обратного вызова, необходимая для форматирования ячейки таблицы
+	 * @param callable $callback Функция обратного вызова, необходимая для форматирования ячейки таблицы
 	 */
 	public function __construct($setterClass, $value, callable $callback=null)
 	{

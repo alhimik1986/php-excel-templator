@@ -38,7 +38,7 @@ $params = [
 		'362 180 $',
 		'5 900 $',
 	],
-		'[sales_manager]' => [
+    '[sales_manager]' => [
 		'Nalty A.',
 		'Ochoa S.',
 		'Patel O.',

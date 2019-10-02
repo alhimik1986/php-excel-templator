@@ -184,7 +184,7 @@ class InsertedCells
 	/**
 	 * @param $row_key integer Строка таблицы, в которой была шаблонная переменная
 	 * @param $col_key integer Столбец таблицы, в котором была шаблонная переменная
-	 * @return string Столбец ячейки с учётом вставленных столбцов и строк (отсчёт с нуля)
+	 * @return integer Столбец ячейки с учётом вставленных столбцов и строк (отсчёт с нуля)
 	 */
 	public function getCurrentColIndex($row_key, $col_key)
 	{

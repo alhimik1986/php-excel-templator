@@ -132,3 +132,39 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params
 ![Специальный шаблон](readme_resources/special_template.png)
 
 Для таких шаблонов создан специальный сеттер: CellSetterArrayValueSpecial. Пример его использования приведён в папке: samples/8_special_template.
+
+
+## Использование событий
+
+Ниже я привёл перечень возможных событий и пояснения, для чего их можно применить:
+```php
+$events = [
+    PhpExcelTemplator::BEFORE_INSERT_PARAMS => function(Worksheet $sheet, array $templateVarsArr) {
+        // Возникает перед вставкой значений в шаблонные переменные
+    },
+    PhpExcelTemplator::AFTER_INSERT_PARAMS => function(Worksheet $sheet, array $templateVarsArr) {
+        // Возникает после вставки значений в шаблонные переменные.
+        // Применяется, если нужно что-нибудь вставить в таблицу после того, как были созданы колонки и строки.
+        // Например, когда нужно вставить массив картинок.
+        // Если вставить картинки, используя $callbacks, то картинки могут смещаться вправо, 
+        // так как при вставке значений в шаблонные переменные, которые находятся ниже, могу создаваться дополнительные колонки.
+        // Поэтому массив картинок лучше вставлять после того, как все дополнительные колонки был созданы.
+        // Для этого используется это событие.
+        // Пример его использования приведён в папке: samples/10_images        
+    },
+    PhpExcelTemplator::BEFORE_SAVE => function(Spreadsheet $spreadsheet, IWriter $writer) {
+        // Возникает перед созданием excel-файла после вставки значений в шаблонные переменные.
+        // Может использоваться, если нам нужно произвести манипуляции с объектом $writer или $spreadsheet.
+        // Например: $writer->setPreCalculateFormulas(false);  
+       
+    },
+];
+$callbacks = [];
+$templateFile = './template.xlsx';
+$fileName = './exported_file.xlsx';
+$params = [
+	// ...
+];
+
+PhpExcelTemplator::saveToFile($templateFile, $fileName, $params, $callbacks, $events);
+```

@@ -137,3 +137,33 @@ There are special templates, which require to insert the whole row, and not inse
 
 
 For these templates, a special setter has been created: CellSetterArrayValueSpecial. Examples of code that uses it is given in folder: samples/8_special_template.
+
+
+## Events
+
+The following are possible events and an explanation of why they can be applied:
+```php
+$events = [
+    PhpExcelTemplator::BEFORE_INSERT_PARAMS => function(Worksheet $sheet, array $templateVarsArr) {
+        // fires before inserting values into template variables        
+    },
+    PhpExcelTemplator::AFTER_INSERT_PARAMS => function(Worksheet $sheet, array $templateVarsArr) {
+        // fires after inserting values into template variables.
+        // It is used if you want to insert values​into a spreadsheet after columns and rows have been created. 
+        // For example, when inserting an array of images.
+        // If you insert images using $callbacks, then the images can shift to the right due to the fact that on the next line the template variable can create additional columns.
+        // See an example: samples/10_images        
+    },
+    PhpExcelTemplator::BEFORE_SAVE => function(Spreadsheet $spreadsheet, IWriter $writer) {
+        // fires before saving to a file. It is used when you need to modify the $writer or $spreadsheet object before saving, for example, $writer->setPreCalculateFormulas(false);        
+    },
+];
+$callbacks = [];
+$templateFile = './template.xlsx';
+$fileName = './exported_file.xlsx';
+$params = [
+	// ...
+];
+
+PhpExcelTemplator::saveToFile($templateFile, $fileName, $params, $callbacks, $events);
+```

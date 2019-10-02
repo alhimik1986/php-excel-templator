@@ -9,11 +9,13 @@ use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\ReferenceHelper;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use Exception;
 
 class CellSetterArray2DValue implements ICellSetter
 {
 	/**
 	 * {@inheritdoc}
+     * @throws Exception
 	 */
 	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
 		$sheet = $setterParam->sheet;
@@ -56,40 +58,42 @@ class CellSetterArray2DValue implements ICellSetter
 		return $insertedCells;
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return boolean
-	 */
+    /**
+     * @param mixed $value
+     * @return boolean
+     * @throws Exception
+     */
 	private function _validateValue($value)
 	{
 		if ( ! is_array($value)) {
-			throw new \Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+			throw new Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
 		} else {
-			$key = key($value);
 			foreach($value as $key=>$val) {
 				if ( ! is_array($value[$key])) {
-					throw new \Exception('В классе '.ExcelParam::class.' поле "value" с ключом "'.$key.'" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+					throw new Exception('В классе '.ExcelParam::class.' поле "value" с ключом "'.$key.'" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
 				}
 			}
 		}
 		return count($value) > 0;
 	}
 
-	/**
-	 * @param Worksheet $sheet
-	 * @param String[] $values
-	 * @param InsertedCells $insertedCells
-	 * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
-	 * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
-	 * @param integer $pCol Текущий столбец таблицы
-	 */
+    /**
+     * @param Worksheet $sheet
+     * @param array $values
+     * @param InsertedCells $insertedCells
+     * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
+     * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
+     * @param integer $pCol Текущий столбец таблицы
+     * @param integer $pRow
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
 	private function _insertNewRowsAndColsIfNeed(Worksheet $sheet, $values, $insertedCells, $col_key, $row_key, $pCol, $pRow)
 	{
 		$objReferenceHelper = ReferenceHelper::getInstance();
 
 		foreach($values as $row_index=>$valueArr) {
 			$colsToInsert = count($valueArr) - 1;
-			$highestColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+			//$highestColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
 
 			// Вставляю строку
 			if ($row_index > 0) {

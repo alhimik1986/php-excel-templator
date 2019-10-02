@@ -5,6 +5,7 @@ namespace alhimik1986\PhpExcelTemplator;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Exception as SpreadsheetException;
 
 class ReferenceHelper extends \PhpOffice\PhpSpreadsheet\ReferenceHelper
 {
@@ -38,7 +39,7 @@ class ReferenceHelper extends \PhpOffice\PhpSpreadsheet\ReferenceHelper
      * @param int $pNumRows Number of rows to insert/delete (negative values indicate deletion)
      * @param Worksheet $pSheet The worksheet that we're editing
      *
-     * @throws Exception
+     * @throws SpreadsheetException
      */
     public function insertNewBefore($pBefore, $pNumCols, $pNumRows, Worksheet $pSheet, $pAfter=null)
     {
