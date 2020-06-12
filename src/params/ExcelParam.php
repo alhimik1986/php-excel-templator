@@ -5,24 +5,24 @@ namespace alhimik1986\PhpExcelTemplator\params;
 class ExcelParam
 {
 	/**
-	 * @var string Класс сеттера, который вставляет значения определённого типа в таблицу
+	 * @var string The setter class name that will insert values into a table
 	 */
 	public $setterClass;
 
 	/**
-	 * @var mixed Значение для параметра
+	 * @var mixed Value of the parameter
 	 */
 	public $value;
 
 	/**
-	 * @var callable Функция обратного вызова, необходимая для форматирования ячейки таблицы
+	 * @var callable Callback function to change style of table cell
 	 */
 	public $callback;
 
 	/**
-	 * @param string $setterClass Класс сеттера, который вставляет значения определённого типа в таблицу
-	 * @param mixed $value Значение для параметра
-	 * @param callable $callback Функция обратного вызова, необходимая для форматирования ячейки таблицы
+	 * @param string $setterClass
+	 * @param mixed $value
+	 * @param callable $callback
 	 */
 	public function __construct($setterClass, $value, callable $callback=null)
 	{

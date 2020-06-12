@@ -2,22 +2,24 @@
 
 namespace alhimik1986\PhpExcelTemplator\setters;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use alhimik1986\PhpExcelTemplator\InsertedCells;
+use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\ReferenceHelper;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-use Exception;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Exception as SpreadsheetException;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use RuntimeException;
 
 class CellSetterArray2DValue implements ICellSetter
 {
-	/**
-	 * {@inheritdoc}
-     * @throws Exception
-	 */
-	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
+    /**
+     * {@inheritDoc}
+     * @throws SpreadsheetException
+     */
+	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells): InsertedCells
+    {
 		$sheet = $setterParam->sheet;
 		$row_key = $setterParam->row_key;
 		$col_key = $setterParam->col_key;
@@ -30,9 +32,9 @@ class CellSetterArray2DValue implements ICellSetter
 		$pColumn = $insertedCells->getCurrentColIndex($row_key, $col_key);
 		$pRow = $insertedCells->getCurrentRowIndex($row_key, $col_key);
 		$values = $param->value;
-		$this->_insertNewRowsAndColsIfNeed($sheet, $values, $insertedCells, $col_key, $row_key, $pColumn, $pRow);
+		$this->_insertNewRowsAndColsIfNeed($sheet, $values, $pColumn, $pRow);
 
-		foreach($values as $row_index=>$value_arr) {
+		foreach($values as $row_index => $value_arr) {
 			foreach($value_arr as $col_index=>$value) {
 				$pColumnWord = Coordinate::stringFromColumnIndex($pColumn + $col_index);
 				$currCellCoordinates = $pColumnWord.($pRow + $row_index);
@@ -49,11 +51,9 @@ class CellSetterArray2DValue implements ICellSetter
 			}
 		}
 
-		foreach($values as $row_index=>$valueArr) {
-			$insertedCells->addInsertedCols($row_key, $col_key, count($valueArr) - 1);
-			break;
-		}
-		$insertedCells->addInsertedRows($row_key, $col_key, count($values)-1);
+		$firstValue = reset($values);
+        $insertedCells->addInsertedCols($row_key, $col_key, count($firstValue) - 1);
+		$insertedCells->addInsertedRows($row_key, $col_key, count($values) - 1);
 
 		return $insertedCells;
 	}
@@ -61,56 +61,53 @@ class CellSetterArray2DValue implements ICellSetter
     /**
      * @param mixed $value
      * @return boolean
-     * @throws Exception
+     * @throws RuntimeException
      */
-	private function _validateValue($value)
+	private function _validateValue($value): bool
 	{
 		if ( ! is_array($value)) {
-			throw new Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
-		} else {
-			foreach($value as $key=>$val) {
-				if ( ! is_array($value[$key])) {
-					throw new Exception('В классе '.ExcelParam::class.' поле "value" с ключом "'.$key.'" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
-				}
-			}
+            throw new RuntimeException('In the '.ExcelParam::class.' class the field "value" must be an array, when the setter '.__CLASS__.' is used.');
 		}
-		return count($value) > 0;
+
+        foreach($value as $key=>$val) {
+            if ( ! is_array($value[$key])) {
+                throw new RuntimeException('In the '.ExcelParam::class.' class the field "value" with index "'.$key.'" must be an array, when the setter '.__CLASS__.' is used.');
+            }
+        }
+        return count($value) > 0;
 	}
 
     /**
      * @param Worksheet $sheet
      * @param array $values
-     * @param InsertedCells $insertedCells
-     * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
-     * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
-     * @param integer $pCol Текущий столбец таблицы
+     * @param integer $pCol The current column index
      * @param integer $pRow
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws SpreadsheetException
      */
-	private function _insertNewRowsAndColsIfNeed(Worksheet $sheet, $values, $insertedCells, $col_key, $row_key, $pCol, $pRow)
-	{
+	private function _insertNewRowsAndColsIfNeed(Worksheet $sheet, $values, $pCol, $pRow): void
+    {
 		$objReferenceHelper = ReferenceHelper::getInstance();
 
 		foreach($values as $row_index=>$valueArr) {
 			$colsToInsert = count($valueArr) - 1;
 			//$highestColumn = Coordinate::columnIndexFromString($sheet->getHighestColumn());
 
-			// Вставляю строку
+			// Inserting row
 			if ($row_index > 0) {
 				$rowsToInsert = 1;
 				$pCol1 = Coordinate::stringFromColumnIndex($pCol);
 				$pCol2 = Coordinate::stringFromColumnIndex($pCol);
-				$coordinate1 = $pCol1 . ($pRow+$row_index);
+				$coordinate1 = $pCol1 . ($pRow + $row_index);
 				$coordinate2 = $pCol2 . ($sheet->getHighestRow()+$rowsToInsert);
 				$objReferenceHelper->insertNewBefore($coordinate1, 0, $rowsToInsert, $sheet, $coordinate2);
 				//echo 'Row    '.$coordinate1.' '.$coordinate2."\n";
 			}
 
-			// Вставляю колонки
-			$pCol1 = Coordinate::stringFromColumnIndex($pCol+1);
-			$pCol2 = Coordinate::stringFromColumnIndex($pCol+$colsToInsert);
-			$coordinate1 = $pCol1 . ($pRow+$row_index);
-			$coordinate2 = $pCol2 . ($pRow+$row_index);
+			// Inserting columns
+			$pCol_1 = Coordinate::stringFromColumnIndex($pCol+1);
+			$pCol_2 = Coordinate::stringFromColumnIndex($pCol+$colsToInsert);
+			$coordinate1 = $pCol_1 . ($pRow + $row_index);
+			$coordinate2 = $pCol_2 . ($pRow + $row_index);
 			$objReferenceHelper->insertNewBefore($coordinate1, $colsToInsert, 0, $sheet, $coordinate2);
 			//echo 'Column '.$coordinate1.' '.$coordinate2.' '.$colsToInsert."\n";
 		}

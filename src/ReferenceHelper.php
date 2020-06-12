@@ -21,7 +21,7 @@ class ReferenceHelper extends \PhpOffice\PhpSpreadsheet\ReferenceHelper
      *
      * @return ReferenceHelper
      */
-    public static function getInstance()
+    public static function getInstance(): ReferenceHelper
     {
         if (!isset(self::$instance) || (self::$instance === null)) {
             self::$instance = new self();
@@ -41,7 +41,7 @@ class ReferenceHelper extends \PhpOffice\PhpSpreadsheet\ReferenceHelper
      *
      * @throws SpreadsheetException
      */
-    public function insertNewBefore($pBefore, $pNumCols, $pNumRows, Worksheet $pSheet, $pAfter=null)
+    public function insertNewBefore($pBefore, $pNumCols, $pNumRows, Worksheet $pSheet, $pAfter=null): void
     {
         $remove = ($pNumCols < 0 || $pNumRows < 0);
         $allCoordinates = $pSheet->getCoordinates();

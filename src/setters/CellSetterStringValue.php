@@ -7,14 +7,16 @@ use alhimik1986\PhpExcelTemplator\InsertedCells;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use RuntimeException;
 
 class CellSetterStringValue implements ICellSetter
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws Exception
      */
-	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
+	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells): InsertedCells
+    {
 		$sheet = $setterParam->sheet;
 		$row_key = $setterParam->row_key;
 		$col_key = $setterParam->col_key;
@@ -30,8 +32,12 @@ class CellSetterStringValue implements ICellSetter
 		$sheet->setCellValue($coordinate, $col_value);
 		if ($param->callback) {
 			$callbackParam = new CallbackParam([
-				'sheet'=>$sheet, 'coordinate'=>$coordinate, 'param'=>$param->value,
-				'tpl_var_name'=>$tpl_var_name, 'row_index'=>0, 'col_index'=>0,
+				'sheet'        => $sheet,
+                'coordinate'   => $coordinate,
+                'param'        => $param->value,
+				'tpl_var_name' => $tpl_var_name,
+                'row_index'    => 0,
+                'col_index'    => 0,
 			]);
 			call_user_func($param->callback, $callbackParam);
 		}
@@ -42,12 +48,12 @@ class CellSetterStringValue implements ICellSetter
     /**
      * @param mixed $value
      * @return boolean
-     * @throws Exception
+     * @throws RuntimeException
      */
-	private function _validateValue($value)
+	private function _validateValue($value): bool
 	{
 		if (is_array($value)) {
-			throw new Exception('В классе '.ExcelParam::class.' поле "value" не должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+            throw new RuntimeException('In the '.ExcelParam::class.' class the field "value" must be an array, when the setter '.__CLASS__.' is used.');
 		}
 		return true;
 	}
