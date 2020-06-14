@@ -3,50 +3,50 @@
 namespace alhimik1986\PhpExcelTemplator\params;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Exception;
+use RuntimeException;
 
 class SetterParam
 {
 	/**
-	 * @var Worksheet Текущий лист таблицы
+	 * @var Worksheet
 	 */
 	public $sheet;
 
 	/**
-	 * @var string Имя шаблонной переменной в файле шаблона
+	 * @var string The name of the template variable in the template file
 	 */
 	public $tpl_var_name;
 
 	/**
-	 * @var ExcelParam[] Параметры, передаваемые в сеттер
+	 * @var ExcelParam[]
 	 */
 	public $params;
 
 	/**
-	 * @var string Индекс строки ячейки, где была шаблонная переменная
+	 * @var string The row index, where was template variable
 	 */
 	public $row_key;
 
 	/**
-	 * @var string Индекс столбца ячейки, где была шаблонная переменная
+	 * @var string The column index, where was template variable
 	 */
 	public $col_key;
 
 	/**
-	 * @var string Текущее содержимое ячейки таблицы
+	 * @var string The cell content
 	 */
 	public $col_content;
 
     /**
      * @param array $params
-     * @throws Exception
+     * @throws RuntimeException
      */
 	public function __construct($params)
 	{
 		$fields = ['sheet', 'tpl_var_name', 'params', 'row_key', 'col_key', 'col_content'];
 		foreach($fields as $field) {
 			if ( ! array_key_exists($field, $params)) {
-				throw new Exception('В конструкторе класса '.__CLASS__.' не был указан параметр '.$field.'.');
+                throw new RuntimeException('In the constructor of '.__CLASS__.' the parameter '.$field.' was not specified.');
 			}
 			$this->$field = $params[$field];
 		}

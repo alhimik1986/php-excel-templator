@@ -16,7 +16,11 @@
         }
     },
     "require": {
-    	"php": ">=5.6.0",
+    	"php": ">=7.2",
     	"phpoffice/phpspreadsheet": ">=1.4"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
     }
 }

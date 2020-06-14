@@ -2,23 +2,24 @@
 
 namespace alhimik1986\PhpExcelTemplator\setters;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use alhimik1986\PhpExcelTemplator\InsertedCells;
+use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use alhimik1986\PhpExcelTemplator\params\ExcelParam;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\ReferenceHelper;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-use Exception;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Exception as SpreadsheetException;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use RuntimeException;
 
 class CellSetterArrayValue implements ICellSetter
 {
     /**
-     * {@inheritdoc}
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws Exception
+     * {@inheritDoc}
+     * @throws SpreadsheetException
      */
-	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells) {
+	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells): InsertedCells
+    {
 		$sheet = $setterParam->sheet;
 		$row_key = $setterParam->row_key;
 		$col_key = $setterParam->col_key;
@@ -32,7 +33,7 @@ class CellSetterArrayValue implements ICellSetter
 		$pColumnIndex = $insertedCells->getCurrentColIndex($row_key, $col_key);
 		$pRow = $insertedCells->getCurrentRowIndex($row_key, $col_key);
 		$values = $param->value;
-		$this->_insertNewRowsIfNeed($sheet, $values, $insertedCells, $col_key, $row_key, $pColumnIndex, $pRow);
+		$this->_insertNewRowsIfNeed($sheet, $values, $pColumnIndex, $pRow);
 
 		foreach($values as $row_index=>$value) {
 			$currCellCoordinates = $pColumn.($pRow + $row_index);
@@ -55,12 +56,12 @@ class CellSetterArrayValue implements ICellSetter
     /**
      * @param mixed $value
      * @return boolean
-     * @throws Exception
+     * @throws RuntimeException
      */
-	private function _validateValue($value)
+	private function _validateValue($value): bool
 	{
 		if ( ! is_array($value)) {
-			throw new Exception('В классе '.ExcelParam::class.' поле "value" должно быть массивом, когда используется сеттер '.__CLASS__.'.');
+            throw new RuntimeException('In the '.ExcelParam::class.' class the field "value" must be an array, when the setter '.__CLASS__.' is used.');
 		}
 		return count($value) > 0;
 	}
@@ -68,14 +69,11 @@ class CellSetterArrayValue implements ICellSetter
     /**
      * @param Worksheet $sheet
      * @param String[] $values
-     * @param InsertedCells $insertedCells
-     * @param integer $col_key Столбец таблицы, в котором была шаблонная переменная
-     * @param integer $row_key Строка таблицы, в которой была шаблонная переменная
-     * @param integer $pColumnIndex Текущий столбец таблицы
-     * @param integer $pRow Текущая строка таблицы
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @param integer $pColumnIndex The current column index
+     * @param integer $pRow The current row index
+     * @throws SpreadsheetException
      */
-	private function _insertNewRowsIfNeed(Worksheet $sheet, $values, $insertedCells, $col_key, $row_key, $pColumnIndex, $pRow)
+	private function _insertNewRowsIfNeed(Worksheet $sheet, $values, $pColumnIndex, $pRow): void
 	{
 		$rowsToInsert = count($values) - 1;
 		if ($rowsToInsert > 0) {
