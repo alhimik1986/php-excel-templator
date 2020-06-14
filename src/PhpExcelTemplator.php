@@ -175,7 +175,6 @@ class PhpExcelTemplator
 	{
 		header('Content-Disposition: attachment; filename="'.$fileName);
 		header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Type: text/html; charset=windows-1251;');
 		header('Pragma: public');
 
 		header('Content-Transfer-Encoding: binary');
