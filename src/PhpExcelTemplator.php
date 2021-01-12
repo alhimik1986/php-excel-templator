@@ -48,6 +48,7 @@ class PhpExcelTemplator
      */
 	public static function saveToFile($templateFile, $outputFile, $params, $callbacks=[], $events=[]): void
 	{
+		//Function to be edited
         $spreadsheet = static::getSpreadsheet($templateFile);
 		$sheet = $spreadsheet->getActiveSheet();
 		$templateVarsArr = $sheet->toArray();
