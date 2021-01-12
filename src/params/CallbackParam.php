@@ -1,6 +1,6 @@
 <?php
 
-namespace alhimik1986\PhpExcelTemplator\params;
+namespace shubhamt619\PhpExcelTemplator\params;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use RuntimeException;
