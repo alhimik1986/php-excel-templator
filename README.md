@@ -53,7 +53,7 @@ Features demo and usage examples are given in the folder "samples".
 ## INSTALLATION:
 
 ```
-$ composer require alhimik1986/php-excel-templator
+$ composer require shubhamt619/php-excel-templator
 ```
 
 ### Template variable naming rules
