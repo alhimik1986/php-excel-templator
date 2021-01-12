@@ -1,6 +1,6 @@
 <?php
 
-namespace alhimik1986\PhpExcelTemplator\setters;
+namespace shubhamt619\PhpExcelTemplator\setters;
 
 use alhimik1986\PhpExcelTemplator\InsertedCells;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
