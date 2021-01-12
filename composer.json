@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "alhimik1986\\PhpExcelTemplator\\": "src"
+            "shubhamt619\\PhpExcelTemplator\\": "src"
         }
     },
     "require": {

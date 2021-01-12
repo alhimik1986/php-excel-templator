@@ -7,11 +7,10 @@
 [![Monthly Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/monthly)](https://packagist.org/packages/shubhamt619/php-excel-templator)
 [![Daily Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/daily)](https://packagist.org/packages/shubhamt619/php-excel-templator)
 
-[Инструкция на русском языке (Russian)](README_ru.md)
-
 It's PHP Spreadsheet extension that allows you to export excel files from an excel template.
 Using the extension you don’t need to create excel files from scratch using code, set styles and so on.
 
+It was modified by Shubham Thakur, 
 Demo screenshot:
 
 ![Demo](readme_resources/demo.png)
