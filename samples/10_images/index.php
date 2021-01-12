@@ -2,8 +2,8 @@
 
 require( __DIR__ . '/../Bootstrap.php');
 
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;

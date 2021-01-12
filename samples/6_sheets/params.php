@@ -1,7 +1,7 @@
 <?php
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
+use shubhamt619\PhpExcelTemplator\params\ExcelParam;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterStringValue;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterArrayValue;
 
 $now = new DateTime();
 $dateArr = [

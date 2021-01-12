@@ -22,7 +22,7 @@ PHP Excel модуль, позволяющий экспортировать exce
 
 Код будет выглядеть следующим образом:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
 require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', [
@@ -72,10 +72,10 @@ $param['[[var_name]]'] = [['text 1', 'text 2', 'text 3']];
 В нём тип данных (например: строка, одномерный массив или двумерный массив) распознаётся автоматически и подставляется нужный сеттер.
 Но если мы хотим использовать определённый сеттер, тогда тот же самый код будет выглядеть следующим образом:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\params\ExcelParam;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterStringValue;
 
 require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
@@ -99,8 +99,8 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params
 ## Как задать стили без использования сеттеров?
 В большинстве случаев задавать сеттеры явно - не так удобно. Хочется использовать минимум кода. Поэтому есть возможность задать стили без использования сеттеров:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
 require_once('vendor/autoload.php'); // если используется чистый код без фреймворка
 
 $params = [

@@ -24,7 +24,7 @@ Suppose we have an excel file with the following template variables:
 
 The code will be as follows:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
 require_once('vendor/autoload.php'); // if you don't use framework
 
 PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', [
@@ -74,10 +74,10 @@ In the example above, the minimum code without setters was used.
 The data types (for example: a string, a one-dimensional array, or a two-dimensional array) in this code is automatically recognized and the necessary setter is chose.
 But if we want to use a specific setter, the same code will look like this:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\params\ExcelParam;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterStringValue;
 
 require_once('vendor/autoload.php'); // if you don't use framework
 
@@ -101,8 +101,8 @@ Examples of code that uses all kinds of setters are listed in the folder "sample
 ## How to set styles without setters?
 In most cases to use the setters explicitly is not so convenient. I suppose you want to use minimum code. Therefore, I made it possible to set styles without using setters:
 ```
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
 require_once('vendor/autoload.php'); // if you don't use framework
 
 $params = [

@@ -8,11 +8,11 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValue;
-use alhimik1986\PhpExcelTemplator\setters\CellSetterArray2DValue;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\SetterParam;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterStringValue;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterArrayValue;
+use shubhamt619\PhpExcelTemplator\setters\CellSetterArray2DValue;
+use shubhamt619\PhpExcelTemplator\params\ExcelParam;
+use shubhamt619\PhpExcelTemplator\params\SetterParam;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 
 class PhpExcelTemplator

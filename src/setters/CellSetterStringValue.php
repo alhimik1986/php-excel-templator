@@ -3,10 +3,10 @@
 namespace shubhamt619\PhpExcelTemplator\setters;
 
 use Exception;
-use alhimik1986\PhpExcelTemplator\InsertedCells;
-use alhimik1986\PhpExcelTemplator\params\SetterParam;
-use alhimik1986\PhpExcelTemplator\params\ExcelParam;
-use alhimik1986\PhpExcelTemplator\params\CallbackParam;
+use shubhamt619\PhpExcelTemplator\InsertedCells;
+use shubhamt619\PhpExcelTemplator\params\SetterParam;
+use shubhamt619\PhpExcelTemplator\params\ExcelParam;
+use shubhamt619\PhpExcelTemplator\params\CallbackParam;
 use RuntimeException;
 
 class CellSetterStringValue implements ICellSetter

@@ -2,7 +2,7 @@
 
 require( __DIR__ . '/../Bootstrap.php');
 
-use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use shubhamt619\PhpExcelTemplator\PhpExcelTemplator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 $templateFile = './template.xlsx';
