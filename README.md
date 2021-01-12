@@ -1,11 +1,11 @@
-# PHP Excel Templator
+# PHP Excel Templator (Modified By Shubham Thakur)
 
-[![Latest Stable Version](https://poser.pugx.org/alhimik1986/php-excel-templator/v/stable)](https://packagist.org/packages/alhimik1986/php-excel-templator)
-[![Latest Unstable Version](https://poser.pugx.org/alhimik1986/php-excel-templator/v/unstable)](https://packagist.org/packages/alhimik1986/php-excel-templator)
-[![License](https://poser.pugx.org/alhimik1986/php-excel-templator/license)](https://packagist.org/packages/alhimik1986/php-excel-templator)
-[![Total Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/downloads)](https://packagist.org/packages/alhimik1986/php-excel-templator)
-[![Monthly Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/monthly)](https://packagist.org/packages/alhimik1986/php-excel-templator)
-[![Daily Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/daily)](https://packagist.org/packages/alhimik1986/php-excel-templator)
+[![Latest Stable Version](https://poser.pugx.org/alhimik1986/php-excel-templator/v/stable)](https://packagist.org/packages/shubhamt619/php-excel-templator)
+[![Latest Unstable Version](https://poser.pugx.org/alhimik1986/php-excel-templator/v/unstable)](https://packagist.org/packages/shubhamt619/php-excel-templator)
+[![License](https://poser.pugx.org/alhimik1986/php-excel-templator/license)](https://packagist.org/packages/shubhamt619/php-excel-templator)
+[![Total Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/downloads)](https://packagist.org/packages/shubhamt619/php-excel-templator)
+[![Monthly Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/monthly)](https://packagist.org/packages/shubhamt619/php-excel-templator)
+[![Daily Downloads](https://poser.pugx.org/alhimik1986/php-excel-templator/d/daily)](https://packagist.org/packages/shubhamt619/php-excel-templator)
 
 [Инструкция на русском языке (Russian)](README_ru.md)
 
