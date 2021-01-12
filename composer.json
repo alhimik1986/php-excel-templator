@@ -1,9 +1,9 @@
 {
     "name": "shubhamt619/php-excel-templator",
     "description": "PHP Spreadsheet extension for generating excel files from template (Modified by shubhamt619)",
-    "keywords": ["php", "excel", "template", "templator", "templater"],
+    "keywords": ["php", "excel", "template", "templator", "templater", "templater_php"],
     "license": "MIT",
-    "version": "v1.0.14",
+    "version": "v1.0.17",
     "authors": [
         {
             "name": "Shubham Thakur",
