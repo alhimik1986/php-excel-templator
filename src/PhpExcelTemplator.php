@@ -55,6 +55,25 @@ class PhpExcelTemplator
 		static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks, $events);
 		static::saveSpreadsheetToFile($spreadsheet, $outputFile, $events);
 	}
+	/**
+     * @param string $templateFile Path to *.xlsx template file
+     * @param string $outputFile Exported file path
+     * @param ExcelParam[] | array $params Parameters of the setter
+     * @param array $callbacks An associative array of callbacks to change cell styles without using setters
+     * @param callable[] $events Events, applied for additional manipulations with the spreadsheet and the writer
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+	public static function saveToFileWithMultipleSheets($sheetsCount = 1, $templateFile, $outputFile, $params, $callbacks=[], $events=[]): void
+	{
+		//Function to be edited
+		$spreadsheet = static::getSpreadsheet($templateFile);
+		for ($i = 1; $i <= $sheetsCount ; $i++) {
+			$sheet = $spreadsheet->getActiveSheet();
+			$templateVarsArr = $sheet->toArray();
+			static::renderWorksheet($sheet, $templateVarsArr, $params, $callbacks, $events);
+		}
+		static::saveSpreadsheetToFile($spreadsheet, $outputFile, $events);
+	}
 
     /**
      * @param string $templateFile Path to *.xlsx template file
