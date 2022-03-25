@@ -337,7 +337,8 @@ class ReferenceHelper
         string $beforeCellAddress,
         int $numberOfColumns,
         int $numberOfRows,
-        Worksheet $worksheet
+        Worksheet $worksheet,
+        $pAfter=null
     ): void {
         $remove = ($numberOfColumns < 0 || $numberOfRows < 0);
         $allCoordinates = $worksheet->getCoordinates();
@@ -355,6 +356,17 @@ class ReferenceHelper
         // Clear cells if we are removing columns or rows
         $highestColumn = $worksheet->getHighestColumn();
         $highestRow = $worksheet->getHighestRow();
+
+//******************************* My changes ********************************************
+        // Get coordinate of $pAfter
+        if ($pAfter !== null) {
+            list($afterColumn, $afterRow) = Coordinate::coordinateFromString($pAfter);
+            $afterColumnIndex = Coordinate::columnIndexFromString($afterColumn);
+
+            $highestColumn = Coordinate::stringFromColumnIndex($afterColumnIndex);
+            $highestRow = $afterRow+1;
+        }
+//***************************************************************************************
 
         // 1. Clear column strips if we are removing columns
         if ($numberOfColumns < 0 && $beforeColumn - 2 + $numberOfColumns > 0) {
@@ -430,8 +442,10 @@ class ReferenceHelper
         }
 
         // Duplicate styles for the newly inserted cells
-        $highestColumn = $worksheet->getHighestColumn();
-        $highestRow = $worksheet->getHighestRow();
+//******************************* My changes ********************************************
+//        $highestColumn = $worksheet->getHighestColumn();
+//        $highestRow = $worksheet->getHighestRow();
+//***************************************************************************************
 
         if ($numberOfColumns > 0 && $beforeColumn - 2 > 0) {
             $this->duplicateStylesByColumn($worksheet, $beforeColumn, $beforeRow, $highestRow, $numberOfColumns);
