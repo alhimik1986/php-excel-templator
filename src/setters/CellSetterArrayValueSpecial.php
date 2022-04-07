@@ -23,6 +23,7 @@ class CellSetterArrayValueSpecial implements ICellSetter
 		$row_key = $setterParam->row_key;
 		$col_key = $setterParam->col_key;
 		$tpl_var_name = $setterParam->tpl_var_name;
+        	$current_col_content = $setterParam->col_content;
 		$param = $setterParam->params[$tpl_var_name];
 		if ( ! $this->_validateValue($param->value)) {
 			return $insertedCells;
@@ -36,8 +37,9 @@ class CellSetterArrayValueSpecial implements ICellSetter
 
 		foreach($values as $row_index=>$value) {
 			$currCellCoordinates = $pColumn.($pRow + $row_index);
+            		$col_value = strtr($current_col_content, [$tpl_var_name => $value]);
 
-			$sheet->setCellValue($currCellCoordinates, $value);
+			$sheet->setCellValue($currCellCoordinates, $col_value);
 			if ($param->callback) {
 				$callbackParam = new CallbackParam([
 					'sheet'=>$sheet, 'coordinate'=>$currCellCoordinates, 'param'=>$param->value,
