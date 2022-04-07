@@ -36,8 +36,10 @@ class CellSetterArrayValueSpecial implements ICellSetter
 
 		foreach($values as $row_index=>$value) {
 			$currCellCoordinates = $pColumn.($pRow + $row_index);
+            		$current_col_content = $sheet->getCell($currCellCoordinates)->getValue() ?: $setterParam->col_content;
+            		$col_value = strtr($current_col_content, [$tpl_var_name => $value]);
 
-			$sheet->setCellValue($currCellCoordinates, $value);
+			$sheet->setCellValue($currCellCoordinates, $col_value);
 			if ($param->callback) {
 				$callbackParam = new CallbackParam([
 					'sheet'=>$sheet, 'coordinate'=>$currCellCoordinates, 'param'=>$param->value,
