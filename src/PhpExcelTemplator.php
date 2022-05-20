@@ -251,7 +251,7 @@ class PhpExcelTemplator
 		$paramKeys = array_keys($params);
 
 		foreach($paramKeys as $paramKey) {
-			if ($string !== null && strpos($string, $paramKey) !== false) {
+			if (strpos($string, $paramKey) !== false) {
 				$result[] = $paramKey;
 			}
 		}
