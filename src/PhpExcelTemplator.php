@@ -173,7 +173,7 @@ class PhpExcelTemplator
 	 */
 	protected static function setHeaders($fileName): void
 	{
-		header('Content-Disposition: attachment; filename="'.$fileName);
+		header('Content-Disposition: attachment; filename="'.$fileName.'"');
 		header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Pragma: public');
 
