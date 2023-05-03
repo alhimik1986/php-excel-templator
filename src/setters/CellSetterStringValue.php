@@ -2,7 +2,6 @@
 
 namespace alhimik1986\PhpExcelTemplator\setters;
 
-use Exception;
 use alhimik1986\PhpExcelTemplator\InsertedCells;
 use alhimik1986\PhpExcelTemplator\params\SetterParam;
 use alhimik1986\PhpExcelTemplator\params\ExcelParam;
@@ -11,50 +10,46 @@ use RuntimeException;
 
 class CellSetterStringValue implements ICellSetter
 {
-    /**
-     * {@inheritDoc}
-     * @throws Exception
-     */
-	public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells): InsertedCells
+    public function setCellValue(SetterParam $setterParam, InsertedCells $insertedCells): InsertedCells
     {
-		$sheet = $setterParam->sheet;
-		$row_key = $setterParam->row_key;
-		$col_key = $setterParam->col_key;
-		$current_col_content = $setterParam->col_content;
-		$tpl_var_name = $setterParam->tpl_var_name;
-		$param = $setterParam->params[$tpl_var_name];
-		if ( ! $this->_validateValue($param->value)) {
-			return $insertedCells;
-		}
+        $sheet             = $setterParam->sheet;
+        $rowKey            = $setterParam->rowKey;
+        $colKey            = $setterParam->colKey;
+        $currentColContent = $setterParam->colContent;
+        $tplVarName        = $setterParam->tplVarName;
+        $param             = $setterParam->params[$tplVarName];
+        if (!$this->_validateValue($param->value)) {
+            return $insertedCells;
+        }
 
-		$coordinate = $insertedCells->getCurrentCellCoordinate($row_key, $col_key);
-		$col_value = strtr($current_col_content, [$tpl_var_name => $param->value]);
-		$sheet->setCellValue($coordinate, $col_value);
-		if ($param->callback) {
-			$callbackParam = new CallbackParam([
-				'sheet'        => $sheet,
+        $coordinate = $insertedCells->getCurrentCellCoordinate($rowKey, $colKey);
+        $col_value  = strtr($currentColContent, [$tplVarName => $param->value]);
+        $sheet->setCellValue($coordinate, $col_value);
+        if ($param->callback) {
+            $callbackParam = new CallbackParam([
+                'sheet'        => $sheet,
                 'coordinate'   => $coordinate,
                 'param'        => $param->value,
-				'tpl_var_name' => $tpl_var_name,
+                'tpl_var_name' => $tplVarName,
                 'row_index'    => 0,
                 'col_index'    => 0,
-			]);
-			call_user_func($param->callback, $callbackParam);
-		}
+            ]);
+            call_user_func($param->callback, $callbackParam);
+        }
 
-		return $insertedCells;
-	}
+        return $insertedCells;
+    }
 
     /**
      * @param mixed $value
-     * @return boolean
-     * @throws RuntimeException
+     *
+     * @return bool
      */
-	private function _validateValue($value): bool
-	{
-		if (is_array($value)) {
-            throw new RuntimeException('In the '.ExcelParam::class.' class the field "value" must be an array, when the setter '.__CLASS__.' is used.');
-		}
-		return true;
-	}
+    private function _validateValue($value): bool
+    {
+        if (is_array($value)) {
+            throw new RuntimeException('In the ' . ExcelParam::class . ' class the field "value" must be an array, when the setter ' . __CLASS__ . ' is used.');
+        }
+        return true;
+    }
 }

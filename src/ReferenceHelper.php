@@ -1,6 +1,7 @@
 <?php
 
 namespace alhimik1986\PhpExcelTemplator;
+
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;

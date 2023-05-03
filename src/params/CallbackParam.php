@@ -7,42 +7,35 @@ use RuntimeException;
 
 class CallbackParam
 {
-	/**
-	 * @var Worksheet
-	 */
-	public $sheet;
-
-	/**
-	 * @var string Current cell coordinate
-	 */
-	public $coordinate;
-
-	/**
-	 * @var mixed The value of the parameter, passed to the setter
-	 */
-	public $param;
-
-	/**
-	 * @var string The template variable name of the template file
-	 */
-	public $tpl_var_name;
-
-	/**
-	 * @var int Current index of the parameter. Scheme: ICellSetter->value[$row_index][$col_index]
-	 */
-	public $row_index;
-
-	/**
-	 * @var int Current subindex of the parameter. Scheme: ICellSetter->value[$row_index][$col_index]
-	 */
-	public $col_index;
-
+    public Worksheet $sheet;
 
     /**
-     * @param array $params
-     * @throws RuntimeException
+     * Current cell coordinate
      */
-	public function __construct($params)
+    public string $coordinate;
+
+    /**
+     * @var mixed
+     * The value of the parameter, passed to the setter
+     */
+    public $param;
+
+	/**
+	 * The template variable name of the template file
+	 */
+	public string $tpl_var_name;
+
+	/**
+	 * Current index of the parameter. Scheme: ICellSetter->value[$row_index][$col_index]
+	 */
+	public int $row_index;
+
+    /**
+     * Current subindex of the parameter. Scheme: ICellSetter->value[$row_index][$col_index]
+     */
+    public int $col_index;
+
+	public function __construct(array $params)
 	{
 		$fields = ['sheet', 'coordinate', 'param', 'tpl_var_name', 'row_index', 'col_index'];
 		foreach($fields as $field) {

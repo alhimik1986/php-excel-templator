@@ -7,7 +7,7 @@ class ExcelParam
 	/**
 	 * @var string The setter class name that will insert values into a table
 	 */
-	public $setterClass;
+	public string $setterClass;
 
 	/**
 	 * @var mixed Value of the parameter
@@ -22,9 +22,9 @@ class ExcelParam
 	/**
 	 * @param string $setterClass
 	 * @param mixed $value
-	 * @param callable $callback
+	 * @param callable|null $callback
 	 */
-	public function __construct($setterClass, $value, callable $callback=null)
+	public function __construct(string $setterClass, $value, callable $callback=null)
 	{
 		$this->setterClass = $setterClass;
 		$this->value       = $value;
