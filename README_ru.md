@@ -133,6 +133,68 @@ PhpExcelTemplator::saveToFile('./template.xlsx', './exported_file.xlsx', $params
 
 Для таких шаблонов создан специальный сеттер: CellSetterArrayValueSpecial. Пример его использования приведён в папке: samples/8_special_template.
 
+## Сеттер для формул
+
+Бывают случае, когда необходимо проставлять формулы в зависимости от соседних ячеек.
+
+Например:
+
+![Cell Formula Example](readme_resources/cell_formula.png)
+
+В данном случае, значение формулы ячейках колонки С должны меняться в соответствии со значениями колонок A и B.  
+
+Для данного кейса есть сеттер `CellSetterFormulaValue`.
+
+### Способ применения:
+
+Шаблон
+
+![Cell Formula Template](readme_resources/cell_formula_template.png)
+
+```php
+<?php
+
+require( __DIR__ . '/../Bootstrap.php');
+
+use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use alhimik1986\PhpExcelTemplator\params\ExcelParam;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValueSpecial;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterFormulaValue;
+use alhimik1986\PhpExcelTemplator\setters\DTO\FormulaValue;
+
+$templateFile = './template.xlsx';
+$fileName = './exported_file.xlsx';
+define('SPECIAL_ARRAY_TYPE', CellSetterArrayValueSpecial::class);
+define('FORMULA_TYPE', CellSetterFormulaValue::class);
+
+$params = [
+	'[col1]' => new ExcelParam(SPECIAL_ARRAY_TYPE, [1, 2, 3, 4]),
+    '[col2]' => new ExcelParam(SPECIAL_ARRAY_TYPE, [2, 3, 4, 5]),
+    '[col3]' => new ExcelParam(FORMULA_TYPE, new FormulaValue('=(%-2,0%)+(%-1,0%)', 4)),
+];
+
+PhpExcelTemplator::saveToFile($templateFile, $fileName, $params);
+// PhpExcelTemplator::outputToFile($templateFile, $fileName, $params); // to download the file from web page
+```
+
+Результат:
+
+![Cell Formula Result](readme_resources/cell_forumla_result.png)
+
+Класс `FormulaValue` принимает 2 аргумента:
+- Формулу со ссылками на соседние ячейки,
+- Кол-во повторений
+
+В формулах можно указать ячейки с помощью ссылок.
+
+Сигнатура ссылки `(% <отношение к колонке>,<отношение к строке> %)`
+
+Например (мы находимся в ячейке C2):
+- `(%-1,0%)` = B2
+- `(%1,-2)` = D0
+- `(%1,1%)` = D3
+- итд
+
 
 ## Использование событий
 
