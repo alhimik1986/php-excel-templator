@@ -138,6 +138,67 @@ There are special templates, which require to insert the whole row, and not inse
 
 For these templates, a special setter has been created: CellSetterArrayValueSpecial. Examples of code that uses it is given in folder: samples/8_special_template.
 
+## Formula setter
+
+There are cases, when you need to set formulas depending on cloned rows.
+
+For example:
+
+![Cell Formula Example](readme_resources/cell_formula.png)
+
+In this case formula for rows in column C, should be dynamically changed, based on values in column A and B.
+
+To solve this case, there is `CellSetterFormulaValue` setter.
+
+### Usage:
+
+Template
+
+![Cell Formula Template](readme_resources/cell_formula_template.png)
+
+```php
+<?php
+
+require( __DIR__ . '/../Bootstrap.php');
+
+use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use alhimik1986\PhpExcelTemplator\params\ExcelParam;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterArrayValueSpecial;
+use alhimik1986\PhpExcelTemplator\setters\CellSetterFormulaValue;
+use alhimik1986\PhpExcelTemplator\setters\DTO\FormulaValue;
+
+$templateFile = './template.xlsx';
+$fileName = './exported_file.xlsx';
+define('SPECIAL_ARRAY_TYPE', CellSetterArrayValueSpecial::class);
+define('FORMULA_TYPE', CellSetterFormulaValue::class);
+
+$params = [
+	'[col1]' => new ExcelParam(SPECIAL_ARRAY_TYPE, [1, 2, 3, 4]),
+    '[col2]' => new ExcelParam(SPECIAL_ARRAY_TYPE, [2, 3, 4, 5]),
+    '[col3]' => new ExcelParam(FORMULA_TYPE, new FormulaValue('=(%-2,0%)+(%-1,0%)', 4)),
+];
+
+PhpExcelTemplator::saveToFile($templateFile, $fileName, $params);
+// PhpExcelTemplator::outputToFile($templateFile, $fileName, $params); // to download the file from web page
+```
+
+Result:
+
+![Cell Formula Result](readme_resources/cell_forumla_result.png)
+
+As you can see class `FormulaValue` receives 2 arguments:
+- Formula, with reference cells (more about them later)
+- Quantity to clone
+
+In formulas, you can define neighbouring cells by reference to them.
+
+Reference signature `(% <column reference>,<row reference> %)`
+
+For example (we are on C2 cell):
+- `(%-1,0%)` = B2
+- `(%1,-2)` = D0
+- `(%1,1%)` = D3
+- etc
 
 ## Events
 
