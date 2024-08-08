@@ -2,6 +2,7 @@
 
 namespace alhimik1986\PhpExcelTemplator;
 
+use Exception;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -350,7 +351,7 @@ class ReferenceHelper
 //******************************* My changes ********************************************
         // Get coordinate of $pAfter
         if ($pAfter !== null) {
-            list($afterColumn, $afterRow) = Coordinate::coordinateFromString($pAfter);
+            [$afterColumn, $afterRow] = Coordinate::coordinateFromString($pAfter);
             $afterColumnIndex = Coordinate::columnIndexFromString($afterColumn);
 
             $highestColumn = Coordinate::stringFromColumnIndex($afterColumnIndex);
@@ -923,34 +924,6 @@ class ReferenceHelper
     }
 
     /**
-     * Update named formulas (i.e. containing worksheet references / named ranges).
-     *
-     * @param Spreadsheet $spreadsheet Object to update
-     * @param string $oldName Old name (name to replace)
-     * @param string $newName New name
-     */
-    public function updateNamedFormulas(Spreadsheet $spreadsheet, $oldName = '', $newName = ''): void
-    {
-        if ($oldName == '') {
-            return;
-        }
-
-        foreach ($spreadsheet->getWorksheetIterator() as $sheet) {
-            foreach ($sheet->getCoordinates(false) as $coordinate) {
-                $cell = $sheet->getCell($coordinate);
-                if (($cell !== null) && ($cell->getDataType() == DataType::TYPE_FORMULA)) {
-                    $formula = $cell->getValue();
-                    if (strpos($formula, $oldName) !== false) {
-                        $formula = str_replace("'" . $oldName . "'!", "'" . $newName . "'!", $formula);
-                        $formula = str_replace($oldName . '!', $newName . '!', $formula);
-                        $cell->setValueExplicit($formula, DataType::TYPE_FORMULA);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Update cell range.
      *
      * @param string $cellRange Cell range    (e.g. 'B2:D4', 'B:C' or '2:3')
@@ -959,6 +932,7 @@ class ReferenceHelper
      * @param int $numberOfRows Number of rows to increment
      *
      * @return string Updated cell range
+     * @throws \Exception
      */
     private function updateCellRange($cellRange = 'A1:A1', $beforeCellAddress = 'A1', $numberOfColumns = 0, $numberOfRows = 0)
     {
@@ -997,6 +971,7 @@ class ReferenceHelper
      * @param int $numberOfRows Number of rows to increment
      *
      * @return string Updated cell reference
+     * @throws \Exception
      */
     private function updateSingleCellReference($cellReference = 'A1', $beforeCellAddress = 'A1', $numberOfColumns = 0, $numberOfRows = 0)
     {
@@ -1030,6 +1005,8 @@ class ReferenceHelper
 
     /**
      * __clone implementation. Cloning should not be allowed in a Singleton!
+     *
+     * @throws \Exception
      */
     final public function __clone()
     {
