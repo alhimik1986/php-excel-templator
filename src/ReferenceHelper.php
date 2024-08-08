@@ -133,7 +133,7 @@ class ReferenceHelper
     {
         $aBreaks = $worksheet->getBreaks();
         ($numberOfColumns > 0 || $numberOfRows > 0) ?
-            uksort($aBreaks, ['self', 'cellReverseSort']) : uksort($aBreaks, ['self', 'cellSort']);
+            uksort($aBreaks, [self::class, 'cellReverseSort']) : uksort($aBreaks, [self::class, 'cellSort']);
 
         foreach ($aBreaks as $key => $value) {
             if (self::cellAddressInDeleteRange($key, $beforeRow, $numberOfRows, $beforeColumnIndex, $numberOfColumns)) {
@@ -191,7 +191,7 @@ class ReferenceHelper
     {
         $aHyperlinkCollection = $worksheet->getHyperlinkCollection();
         ($numberOfColumns > 0 || $numberOfRows > 0) ?
-            uksort($aHyperlinkCollection, ['self', 'cellReverseSort']) : uksort($aHyperlinkCollection, ['self', 'cellSort']);
+            uksort($aHyperlinkCollection, [self::class, 'cellReverseSort']) : uksort($aHyperlinkCollection, [self::class, 'cellSort']);
 
         foreach ($aHyperlinkCollection as $key => $value) {
             $newReference = $this->updateCellReference($key, $beforeCellAddress, $numberOfColumns, $numberOfRows);
@@ -214,7 +214,7 @@ class ReferenceHelper
     {
         $aDataValidationCollection = $worksheet->getDataValidationCollection();
         ($numberOfColumns > 0 || $numberOfRows > 0) ?
-            uksort($aDataValidationCollection, ['self', 'cellReverseSort']) : uksort($aDataValidationCollection, ['self', 'cellSort']);
+            uksort($aDataValidationCollection, [self::class, 'cellReverseSort']) : uksort($aDataValidationCollection, [self::class, 'cellSort']);
 
         foreach ($aDataValidationCollection as $key => $value) {
             $newReference = $this->updateCellReference($key, $before, $numberOfColumns, $numberOfRows);
@@ -256,7 +256,7 @@ class ReferenceHelper
     {
         $aProtectedCells = $worksheet->getProtectedCells();
         ($numberOfColumns > 0 || $numberOfRows > 0) ?
-            uksort($aProtectedCells, ['self', 'cellReverseSort']) : uksort($aProtectedCells, ['self', 'cellSort']);
+            uksort($aProtectedCells, [self::class, 'cellReverseSort']) : uksort($aProtectedCells, [self::class, 'cellSort']);
         foreach ($aProtectedCells as $key => $value) {
             $newReference = $this->updateCellReference($key, $beforeCellAddress, $numberOfColumns, $numberOfRows);
             if ($key != $newReference) {
