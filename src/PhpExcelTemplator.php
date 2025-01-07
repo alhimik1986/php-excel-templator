@@ -10,6 +10,7 @@ use alhimik1986\PhpExcelTemplator\setters\CellSetterStringValue;
 use alhimik1986\PhpExcelTemplator\setters\ICellSetter;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -214,12 +215,8 @@ class PhpExcelTemplator
                 if ($col_content) {
                     foreach ($paramKeys as $paramKey) {
                         if (strpos($col_content, $paramKey) !== false) {
-                            $sheet->setCellValueExplicitByColumnAndRow(
-                                $col_key + 1,
-                                $row_key + 1,
-                                null,
-                                DataType::TYPE_NULL
-                            );
+                            $cell_address = CellAddress::fromColumnAndRow($col_key + 1, $row_key + 1);
+                            $sheet->setCellValueExplicit($cell_address, null, DataType::TYPE_NULL);
                         }
                     }
                 }
